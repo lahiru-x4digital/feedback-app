@@ -16,6 +16,6 @@ export default async function page({ searchParams }) {
     }
   );
   const data = await res.json();
-
-  return <div>{<FeedbackForm data={data} />}</div>;
+console.log(data)
+  return <div>{<FeedbackForm data={data.data} />}</div>;
 }

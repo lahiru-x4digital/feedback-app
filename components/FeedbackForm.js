@@ -34,30 +34,40 @@ const SALT_THEME = {
 
 export default function Page({ data }) {
   const searchParams = useSearchParams();
+  const star = searchParams.get("star") ;
+
   const [selected, setSelected] = React.useState(null);
   const [comments, setComments] = React.useState("");
-  const [theme, setTheme] = React.useState(DEFAULT_THEME);
-  const [rating, setRating] = React.useState(0);
+  const brand=data.branch.brand
+  const [theme, setTheme] = React.useState({
+    
+    primaryColor: brand.brand_main_color,
+    backgroundColor: brand.brand_secondary_color,
+    logo: brand.cover_image,
+    brandName: brand.brand_name,
+    font_color: brand.font_color,
+  });
+  const [rating, setRating] = React.useState(parseInt(star)||0);
 
   useEffect(() => {
     // Get theme from URL parameter or use default
-    const themeName = searchParams.get("theme") || "parkers";
-    switch (themeName) {
-      case "parkers":
-        setTheme(DEFAULT_THEME);
-        break;
-      case "somewhere":
-        setTheme(SOMEWHERE_THEME);
-        break;
-      case "public":
-        setTheme(PUBLIC_THEME);
-        break;
-      case "salt":
-        setTheme(SALT_THEME);
-        break;
-      default:
-        setTheme(DEFAULT_THEME);
-    }
+    // const themeName = searchParams.get("theme") || "parkers";
+    // switch (themeName) {
+    //   case "parkers":
+    //     setTheme(DEFAULT_THEME);
+    //     break;
+    //   case "somewhere":
+    //     setTheme(SOMEWHERE_THEME);
+    //     break;
+    //   case "public":
+    //     setTheme(PUBLIC_THEME);
+    //     break;
+    //   case "salt":
+    //     setTheme(SALT_THEME);
+    //     break;
+    //   default:
+    //     setTheme(DEFAULT_THEME);
+    // }
   }, [searchParams]);
 
   const handleSubmit = async (e) => {
@@ -70,7 +80,7 @@ export default function Page({ data }) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/customer/feedback/${data?.data?.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/customer/feedback/${data?.id}`,
         {
           method: "PATCH",
           headers: {
@@ -121,7 +131,7 @@ export default function Page({ data }) {
           />
         </div>
 
-        {!data?.data?.submited && (
+        {!data?.submited && (
           <>
             <h1
               className="text-3xl font-extrabold text-center leading-tight tracking-tight"
@@ -129,7 +139,7 @@ export default function Page({ data }) {
             >
               Your opinion matters to us
             </h1>
-            <p className="text-center text-gray-600 mb-4 text-[17px] leading-relaxed font-medium">
+            <p style={{ color: theme.font_color }} className="text-center mb-4 text-[17px] leading-relaxed font-medium">
               Thank you for taking the time to share your feedback.
             </p>
 
@@ -290,7 +300,7 @@ export default function Page({ data }) {
             </form>
           </>
         )}
-        {data?.data?.submited && (
+        {data?.submited && (
           <>
             <h1
               className="text-3xl font-extrabold text-center leading-tight tracking-tight"
