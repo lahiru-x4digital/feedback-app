@@ -34,7 +34,7 @@ const SALT_THEME = {
 
 export default function Page({ data }) {
   const searchParams = useSearchParams();
-  const star = searchParams.get("star") ;
+  const star = searchParams.get("star") || 0 ;
 
   const [selected, setSelected] = React.useState(null);
   const [comments, setComments] = React.useState("");
